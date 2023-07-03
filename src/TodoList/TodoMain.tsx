@@ -23,7 +23,7 @@ TodoMain
         value={todoinput}
         onChange={(e)=>{settodoinput(e.target.value)}}
         />
-        <button onClick={()=>{
+        <button style={{'backgroundColor':'blue'}} onClick={()=>{
             dispatch(listinput(todoinput))
             settodoinput('');
             }}>list</button>
