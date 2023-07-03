@@ -1,15 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+interface TodoState {
+    data: string[];
+  }
 
 const TodoFunctions = createSlice({
     name:'todo',
-    initialState:{data:''},
+    initialState: { data: [] } as TodoState,
     reducers:{
        listinput:(state,action)=>{
-        state.data = action.payload
+        state.data.push(action.payload);
+       },
+       listremove:(state,action)=>{
+       state.data = state.data.filter(a => a != action.payload)
        } 
     }
 });
 
-export const { listinput } = TodoFunctions.actions;
+export const { listinput,listremove } = TodoFunctions.actions;
 export default TodoFunctions.reducer;
