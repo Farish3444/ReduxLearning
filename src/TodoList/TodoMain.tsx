@@ -23,10 +23,10 @@ TodoMain
         value={todoinput}
         onChange={(e)=>{settodoinput(e.target.value)}}
         />
-        <button style={{'backgroundColor':'red'}} onClick={()=>{
+        <button style={{'backgroundColor':'red',color:'white'}} onClick={()=>{
             dispatch(listinput(todoinput))
             settodoinput('');
-            }}>list</button>
+            }}>list the Items in local branch</button>
         {todoData.map((todo,index)=>(
             <ul>
                 <li key={index}>{todo}</li>
