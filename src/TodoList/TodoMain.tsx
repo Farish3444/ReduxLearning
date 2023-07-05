@@ -8,25 +8,29 @@ const TodoMain = () => {
   
     const [todoinput, settodoinput] = useState('');
     const dispatch = useDispatch();
-    const todoData = useSelector((state:{todostore:{data:string[]}})=>state.todostore.data);   
+    const todoData = useSelector((state:{todostore:{data:string[]}})=>state.todostore.data); 
+    const [validate,setvalidate] = useState(false);  
 
-    useEffect(() => {
-        console.log(todoData);
-        settodoinput(''); 
-      }, [todoData]);
+    let totaltodo = todoData.length
 
 
     return (
     <div>
-TodoMain
+TodoMain - {totaltodo}
         <input 
         value={todoinput}
         onChange={(e)=>{settodoinput(e.target.value)}}
         />
         <button style={{'backgroundColor':'red',color:'white'}} onClick={()=>{
-            dispatch(listinput(todoinput))
-            settodoinput('');
+            if(todoinput){
+                setvalidate(false)
+                dispatch(listinput(todoinput))
+                settodoinput('');
+            }else{
+                setvalidate(true);
+            }
             }}>list the Items in local branch</button>
+            {validate && <p style={{color:'red'}}>Enter any value</p>}
         {todoData.map((todo,index)=>(
             <ul>
                 <li key={index}>{todo}</li>
