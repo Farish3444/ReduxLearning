@@ -12,6 +12,8 @@ import RootLayout from './Cart/RootLayout';
 import Dashboard from './Cart/Dashboard';
 import Cart from './Cart/Cart';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PostList from './FormPost/features/PostList';
+import AddPostForm from './FormPost/features/AddPostForm';
 
 
 function App() {
@@ -26,7 +28,9 @@ function App() {
 
   return (
     <div className="App">
-<RouterProvider router={router} />
+{/* <RouterProvider router={router} /> */}
+<AddPostForm />
+<PostList />
     </div>
   );
 }
