@@ -60,6 +60,7 @@ const AddPostForm = () => {
         <Button type='button'
         variant="contained"
         onClick={onSavePostClicked}
+        disabled={title && content ? false : true}
         >Save Post</Button>
       </form>
     </div>
