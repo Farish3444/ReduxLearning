@@ -1,7 +1,6 @@
 import React,{useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Sidebar from './Components/Sidebar';
 import { Provider } from 'react-redux';
 import Counter from './Counter';
 import TodoMain from './TodoList/TodoMain';

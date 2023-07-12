@@ -7,6 +7,9 @@ import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+import TimeAgo from './users/TimeAgo';
+import PostAuthor from './PostAuthor';
+import ReactionButtons from './ReactionButtons';
 
 
 const style = {
@@ -27,13 +30,23 @@ const PostList = () => {
   const posts = useSelector(selectAllPosts);
   const dispatch = useDispatch();
 
+  const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data))
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const renderpost = posts.map((p:any)=>(
+
+
+  const renderpost = orderedPosts.map((p:any)=>(
     <article key={p.id}>
       <h3>{p.title}</h3>
+      <p>{p.content.substring(0,50)}</p>
+      <PostAuthor userId={p.userId} />
+      <TimeAgo timestamp={p.date} />
+      <br />
+      <ReactionButtons post={p} />
+
       <Button 
       variant='contained'
       color='error'

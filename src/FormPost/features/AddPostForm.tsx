@@ -4,29 +4,31 @@ import { selectAllPosts } from './PostSlice'
 import { nanoid } from '@reduxjs/toolkit'
 import { postAdded } from './PostSlice';
 import { TextField } from '@mui/material';
-import {Button} from '@mui/material';
+import {Button,Select,FormControl} from '@mui/material';
 
 const AddPostForm = () => {
     
     const dispatch = useDispatch();
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState('');
+    const [author,setauthor] = useState('');
 
     const users = useSelector(selectAllPosts);
     const onTitleChanged = (e:any) => setTitle(e.target.value)
     const onContentChanged = (e:any) => setContent(e.target.value)
     const onAuthorChanged = (e:any) => setUserId(e.target.value)
 
+    const usersOptions = users.map((user:any) => (
+      <option key={user.id} value={user.id}>
+          {user.name}
+      </option>
+  ))
 
     const onSavePostClicked =()=>{
-        if(title && content){
+        if(title && content ){
              dispatch(
-                postAdded({
-                    id:nanoid(),
-                    title,
-                    content
-                })
+                postAdded(title,content,userId)
              )
              setTitle('');
              setContent('');
@@ -57,6 +59,15 @@ const AddPostForm = () => {
         value={content}
         onChange={onContentChanged} />
         <br />
+        <FormControl style={{ width: '100%' }}>  
+        <label htmlFor="postAuthor">Author:</label>
+                <Select id="postAuthor" value={userId} onChange={onAuthorChanged}>
+                    <option value="">
+                    </option>
+                    {usersOptions}
+                </Select>
+        </FormControl>
+        <br/>
         <Button type='button'
         variant="contained"
         onClick={onSavePostClicked}
