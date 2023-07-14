@@ -17,7 +17,7 @@ const AddPostForm = () => {
     const users = useSelector(selectAllPosts);
     const onTitleChanged = (e:any) => setTitle(e.target.value)
     const onContentChanged = (e:any) => setContent(e.target.value)
-    const onAuthorChanged = (e:any) => setUserId(e.target.value)
+    const onAuthorChanged = (e:any) => setauthor(e.target.value)
 
     const usersOptions = users.map((user:any) => (
       <option key={user.id} value={user.id}>
@@ -28,7 +28,7 @@ const AddPostForm = () => {
     const onSavePostClicked =()=>{
         if(title && content ){
              dispatch(
-                postAdded(title,content,userId)
+                postAdded(title,content,author)
              )
              setTitle('');
              setContent('');
@@ -44,7 +44,6 @@ const AddPostForm = () => {
         <label htmlFor='postTitle'>Post Title</label>    
         <TextField 
         type='text'
-        // name='postTitle'
         value={title}
         style={{width:'100%'}}
         id="outlined-basic"
@@ -59,14 +58,20 @@ const AddPostForm = () => {
         value={content}
         onChange={onContentChanged} />
         <br />
-        <FormControl style={{ width: '100%' }}>  
+        
         <label htmlFor="postAuthor">Author:</label>
-                <Select id="postAuthor" value={userId} onChange={onAuthorChanged}>
+                {/* <Select id="postAuthor" value={userId} onChange={onAuthorChanged}>
                     <option value="">
                     </option>
                     {usersOptions}
-                </Select>
-        </FormControl>
+                </Select> */}
+    <TextField 
+        type='text'
+        // id='postTitle'
+        name='postTitle'
+        id="outlined-basic"
+        value={author}
+        onChange={onAuthorChanged} />
         <br/>
         <Button type='button'
         variant="contained"

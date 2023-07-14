@@ -36,13 +36,14 @@ const PostList = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  console.log(orderedPosts,'orderedPOsts')
 
 
   const renderpost = orderedPosts.map((p:any)=>(
     <article key={p.id}>
       <h3>{p.title}</h3>
       <p>{p.content.substring(0,50)}</p>
-      <PostAuthor userId={p.userId} />
+      <PostAuthor authorname={p.author} />
       <TimeAgo timestamp={p.date} />
       <br />
       <ReactionButtons post={p} />
