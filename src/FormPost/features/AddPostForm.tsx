@@ -19,19 +19,15 @@ const AddPostForm = () => {
     const onContentChanged = (e:any) => setContent(e.target.value)
     const onAuthorChanged = (e:any) => setauthor(e.target.value)
 
-    const usersOptions = users.map((user:any) => (
-      <option key={user.id} value={user.id}>
-          {user.name}
-      </option>
-  ))
 
     const onSavePostClicked =()=>{
-        if(title && content ){
+        if(title && content && author ){
              dispatch(
                 postAdded(title,content,author)
              )
              setTitle('');
              setContent('');
+             setauthor('');
         }
     }
 
@@ -52,7 +48,6 @@ const AddPostForm = () => {
          <label htmlFor='postContent'>Post Content</label>
          <TextField 
         type='text'
-        // id='postTitle'
         name='postTitle'
         id="outlined-basic"
         value={content}
@@ -60,14 +55,8 @@ const AddPostForm = () => {
         <br />
         
         <label htmlFor="postAuthor">Author:</label>
-                {/* <Select id="postAuthor" value={userId} onChange={onAuthorChanged}>
-                    <option value="">
-                    </option>
-                    {usersOptions}
-                </Select> */}
     <TextField 
         type='text'
-        // id='postTitle'
         name='postTitle'
         id="outlined-basic"
         value={author}
