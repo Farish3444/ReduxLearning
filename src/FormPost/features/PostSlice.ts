@@ -141,7 +141,7 @@ const postsSlice = createSlice({
   },
 });
 
-export const selectAllPosts = (state: { posts: Post[] }) => state.posts;
+export const selectAllPosts = (state: { posts: APIState }) => state.posts.posts;
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 
