@@ -16,7 +16,6 @@ export interface Post {
   date: string;
   userId?: string;
   reactions: ReactionState;
-  author:string;
 }
 
 const initialState: Post[] = [
@@ -25,7 +24,6 @@ const initialState: Post[] = [
     title: 'Learning Redux Toolkit',
     content: "I've heard good things.",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
-    author:'tolstoy',
     reactions: {
       thumbsUp: 0,
       wow: 0,
@@ -39,7 +37,6 @@ const initialState: Post[] = [
     title: 'Slices...',
     content: "The more I say slice, the more I want pizza.",
     date: sub(new Date(), { minutes: 5 }).toISOString(),
-    author:'murakami',
     reactions: {
       thumbsUp: 0,
       wow: 0,
@@ -67,14 +64,14 @@ const postsSlice = createSlice({
       reducer: (state, action: PayloadAction<Post>) => {
         state.push(action.payload);
       },
-      prepare: (title: string, content: string, author: string) => {
+      prepare: (title: string, content: string, userId?: string) => {
         return {
           payload: {
             id: nanoid(),
             title,
             content,
             date: new Date().toISOString(),
-            author,
+            userId,
             reactions: {
               thumbsUp: 0,
               wow: 0,

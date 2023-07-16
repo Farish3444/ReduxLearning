@@ -34,23 +34,55 @@ const PostList = () => {
   const errorStatus = useSelector(getPostsError)
 
   
+  const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data))
 
-  let content;
-  if(postStatus === 'loading'){
-    content= <h1>Loading</h1>
-  } else if(postStatus === 'succeeded'){
-    const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data))
-    content = orderedPosts.map((post:any) => <PostExcerpt post={post} key={post.id} /> )
-  } else if (postStatus === 'failed'){
-    content = <p>{errorStatus}</p>;
-  }
+
+  const renderpost = orderedPosts.map((p:any)=>(
+    <article key={p.id}>
+      <h3>{p.title}</h3>
+      <p>{p.content.substring(0,50)}</p>
+      <PostAuthor authorname={p.author} />
+      <TimeAgo timestamp={p.date} />
+      <br />
+      <ReactionButtons post={p} />
+
+      <Button 
+      variant='contained'
+      color='error'
+      // onClick={()=>setOpen(true)}
+      >delete</Button>
+      {/* {
+        open && <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+           Are you Sure want to Delete this POST
+          </Typography>
+         <div style={{display:'flex',justifyContent:'space-around'}}>
+            <Button variant='contained' color='success' style={{width:'30%'}}  onClick={()=>
+            {
+        dispatch(removePost(p.id))
+        handleClose()
+      }}>YES</Button>
+            <Button variant='contained' color='error' style={{width:'30%'}} onClick={handleClose}>NO</Button>
+         </div>
+        </Box>
+      </Modal>
+      } */}
+      
+    </article>
+  ))
 
   return (
     <div>
      <h1>
        PostList
       </h1>
-     {content}
+     {renderpost}
     </div>
   )
 }
