@@ -2,7 +2,6 @@ import React,{ useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAllPosts } from './PostSlice';
 import { Button } from '@mui/material';
-import { removePost } from './PostSlice';
 import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -52,7 +51,7 @@ const PostList = () => {
       color='error'
       onClick={()=>setOpen(true)}
       >delete</Button>
-      {
+      {/* {
         open && <Modal
         open={open}
         onClose={handleClose}
@@ -73,7 +72,7 @@ const PostList = () => {
          </div>
         </Box>
       </Modal>
-      }
+      } */}
       
     </article>
   ))
