@@ -17,13 +17,13 @@ const AddPostForm = () => {
     const users = useSelector(selectAllPosts);
     const onTitleChanged = (e:any) => setTitle(e.target.value)
     const onContentChanged = (e:any) => setContent(e.target.value)
-    const onAuthorChanged = (e:any) => setUserId(e.target.value)
+    const onAuthorChanged = (e:any) => setauthor(e.target.value)
 
-
+  
     const onSavePostClicked =()=>{
         if(title && content && author ){
              dispatch(
-                postAdded(title,content,userId)
+                postAdded(title,content,author)
              )
              setTitle('');
              setContent('');
@@ -49,6 +49,7 @@ const AddPostForm = () => {
          <label htmlFor='postContent'>Post Content</label>
          <TextField 
         type='text'
+        // id='postTitle'
         name='postTitle'
         id="outlined-basic"
         value={content}
@@ -58,6 +59,7 @@ const AddPostForm = () => {
         <label htmlFor="postAuthor">Author:</label>
     <TextField 
         type='text'
+        // id='postTitle'
         name='postTitle'
         id="outlined-basic"
         value={author}

@@ -2,7 +2,6 @@ import React,{ useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectAllPosts } from './PostSlice';
 import { Button } from '@mui/material';
-import { removePost } from './PostSlice';
 import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -10,8 +9,7 @@ import Typography from '@mui/material/Typography';
 import TimeAgo from './users/TimeAgo';
 import PostAuthor from './PostAuthor';
 import ReactionButtons from './ReactionButtons';
-import PostExcerpt from './PostExcerpt';
-import { getPostsStatus,getPostsError } from '../../APIcalls/ApiSlice';
+
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -27,14 +25,19 @@ const style = {
 
 
 const PostList = () => {
-  const dispatch = useDispatch();
 
   const posts = useSelector(selectAllPosts);
-  const postStatus = useSelector(getPostsStatus)
-  const errorStatus = useSelector(getPostsError)
+  const dispatch = useDispatch();
 
-  
-  const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data))
+  const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data));
+
+  console.log(orderedPosts,'POSTLISTS')
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  console.log(orderedPosts,'orderedPOsts')
 
 
   const renderpost = orderedPosts.map((p:any)=>(
@@ -82,7 +85,7 @@ const PostList = () => {
      <h1>
        PostList
       </h1>
-     {renderpost}
+      {renderpost}
     </div>
   )
 }

@@ -3,13 +3,14 @@ import { useSelector } from 'react-redux';
 import { selectAllusers } from './users/UserSlice';
 
 interface userIdProps{
-   userId:string;
+   authorname:string;
 }
 
 const PostAuthor:FC<userIdProps> = ({ authorname }) => {
   
    const users = useSelector(selectAllusers);
 
+  // console.log(users,'POSTAUTHOR');
   
   //  const author = users.find((u:any) =>u.id === userId)
    const author = users.map((m:any)=>m.author);
@@ -19,7 +20,10 @@ const PostAuthor:FC<userIdProps> = ({ authorname }) => {
   // const author = users.find((u:any) =>u.id === userId)
 
   return (
-  <span>by {author ? author.name : 'unknow Author'}</span>
+  <span>by
+    {/* {authorname}  */}
+    {authorname ? authorname : 'unknow Author'}
+    </span>
   )
 }
 
