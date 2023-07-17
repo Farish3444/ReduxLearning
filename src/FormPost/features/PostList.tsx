@@ -1,6 +1,7 @@
-import React,{ useState } from 'react';
+import React,{ useState,useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectAllPosts } from './PostSlice';
+import { ThunkDispatch,AnyAction } from '@reduxjs/toolkit';
+import { selectAllPosts, getPostsStatus,getPostsError, fetchPosts } from './PostSlice';
 import { Button } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
@@ -9,7 +10,8 @@ import Typography from '@mui/material/Typography';
 import TimeAgo from './users/TimeAgo';
 import PostAuthor from './PostAuthor';
 import ReactionButtons from './ReactionButtons';
-
+import PostsExcerpt from './PostExcert';
+import { fetchUsers } from './users/UserSlice';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -27,7 +29,10 @@ const style = {
 const PostList = () => {
 
   const posts = useSelector(selectAllPosts);
-  const dispatch = useDispatch();
+  const postStatus = useSelector(getPostsStatus);
+  const error = useSelector(getPostsError);
+ 
+  const dispatch: ThunkDispatch<any, void, AnyAction> = useDispatch();
 
   const orderedPosts = posts.slice().sort((a:any,b:any)=>b.date.localeCompare(a.data))
 
@@ -35,47 +40,43 @@ const PostList = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  useEffect(()=>{
+    if(postStatus === 'idle'){
+      dispatch(fetchUsers());
+      dispatch(fetchPosts());
+    }
+    console.log(orderedPosts,'order order')
+  },[postStatus,dispatch])
 
 
-  const renderpost = orderedPosts.map((p:any)=>(
-    <article key={p.id}>
-      <h3>{p.title}</h3>
-      <p>{p.content.substring(0,50)}</p>
-      <PostAuthor userId={p.userId} />
-      <TimeAgo timestamp={p.date} />
-      <br />
-      <ReactionButtons post={p} />
+  // let content;
+  // if (postStatus === 'loading') {
+  //     content = <p>"Loading..."</p>;
+  // } else if (postStatus === 'succeeded') {
+  //     const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+  //     content = orderedPosts.map(post => <PostsExcerpt key={post.id} post={post} />)
+  // } else if (postStatus === 'failed') {
+  //     content = <p>{error}</p>;
+  //     alert('error try again')
+  // }
 
-      <Button 
-      variant='contained'
-      color='error'
-      onClick={()=>setOpen(true)}
-      >delete</Button>
-      {/* {
-        open && <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-           Are you Sure want to Delete this POST
-          </Typography>
-         <div style={{display:'flex',justifyContent:'space-around'}}>
-            <Button variant='contained' color='success' style={{width:'30%'}}  onClick={()=>
-            {
-        dispatch(removePost(p.id))
-        handleClose()
-      }}>YES</Button>
-            <Button variant='contained' color='error' style={{width:'30%'}} onClick={handleClose}>NO</Button>
-         </div>
-        </Box>
-      </Modal>
-      } */}
-      
-    </article>
-  ))
+
+   const renderpost = orderedPosts.map((p:any)=>(
+     <article key={p.id}>
+       <h3>{p.title}</h3>
+       <p>{p.body.substring(0,50)}</p>
+       <PostAuthor userId={p.userId} />
+       <TimeAgo timestamp={p.date} />
+       <br />
+       <ReactionButtons post={p} />
+
+       <Button 
+       variant='contained'
+       color='error'
+       onClick={()=>setOpen(true)}
+       >delete</Button>
+     </article>
+   ))
 
   return (
     <div>
@@ -83,6 +84,7 @@ const PostList = () => {
        PostList
       </h1>
       {renderpost}
+      {/* {content} */}
     </div>
   )
 }

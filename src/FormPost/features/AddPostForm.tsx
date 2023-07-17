@@ -1,18 +1,23 @@
 import React,{useState} from 'react'
 import { useDispatch,useSelector } from 'react-redux'
 import { selectAllPosts } from './PostSlice'
-import { nanoid } from '@reduxjs/toolkit'
-import { postAdded } from './PostSlice';
+import { nanoid,ThunkAction,ThunkDispatch,AnyAction } from '@reduxjs/toolkit'
+import { addNewPost } from './PostSlice';
 import { TextField } from '@mui/material';
 import {Button,Select,FormControl} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const AddPostForm = () => {
     
-    const dispatch = useDispatch();
+  const dispatch: ThunkDispatch<any, void, AnyAction> = useDispatch();
+    const navigate = useNavigate();
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [userId, setUserId] = useState('');
     const [author,setauthor] = useState('');
+    const [addRequestStatus, setAddRequestStatus] = useState('idle');
+
+    const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle';
 
     const users = useSelector(selectAllPosts);
     const onTitleChanged = (e:any) => setTitle(e.target.value)
@@ -26,12 +31,25 @@ const AddPostForm = () => {
   ))
 
     const onSavePostClicked =()=>{
-        if(title && content ){
-             dispatch(
-                postAdded(title,content,userId)
-             )
-             setTitle('');
-             setContent('');
+        if(canSave){
+          let postbody = {
+            title,
+            body:content,
+            userId
+          }
+            try{
+                setAddRequestStatus('pending')
+                dispatch(addNewPost(postbody)).unwrap();
+              setTitle('');
+              setContent('');
+              setUserId('');
+              navigate('/')
+            } catch(err){
+              console.error('Failed to save post',err)
+            } finally {
+              setAddRequestStatus('idle');
+            }
+           
         }
     }
 

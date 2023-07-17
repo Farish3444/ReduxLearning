@@ -7,6 +7,11 @@ import { Provider } from 'react-redux';
 // import store from './redux/store';
 // import store from './Cart/store/store';
 import store from './FormPost/store';
+import { fetchUsers } from './FormPost/features/users/UserSlice';
+
+
+// store.dispatch(fetchUsers());
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

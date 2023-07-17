@@ -69,7 +69,7 @@ export interface APIState {
 const initialState: APIState = {
   posts: [],
   status: 'idle',
-  error: null,
+  error: null ,
 };
 
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
@@ -139,9 +139,41 @@ const postsSlice = createSlice({
       }
     },
   },
+  extraReducers(builder){
+        builder
+  .addCase(fetchPosts.pending,(state,action)=>{
+          state.status = 'loading';
+        })
+  .addCase(fetchPosts.fulfilled,(state,action)=>{
+    state.status ='succeeded'
+    let min = 1;
+    const loadedPosts = action.payload.map((post:any)=>{
+        post.date = sub(new Date(), { minutes: min++ }).toISOString();
+        post.reactions = {
+          thumbsUp: 0,
+          wow: 0,
+          heart: 0,
+          rocket: 0,
+          coffee: 0
+        }
+        return post;
+    });
+    state.posts = state.posts.concat(loadedPosts)
+  })
+  .addCase(fetchPosts.rejected,(state,action)=>{
+    state.status = 'failed'
+    state.error = action.error.message ?? null
+  })    
+  }
+
 });
 
 export const selectAllPosts = (state: { posts: APIState }) => state.posts.posts;
+export const getPostsStatus = (state: { posts: APIState }) => state.posts.status;
+export const getPostsError = (state : { posts: APIState }) => state.posts.error;
+
+export const selectPostById = (state:any, postId:any) => state.posts.posts.find((post:any) => post.id === postId);
+
 
 export const { postAdded, reactionAdded } = postsSlice.actions;
 
