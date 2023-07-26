@@ -10,7 +10,7 @@ import store from './FormPost/store';
 import { fetchUsers } from './FormPost/features/users/UserSlice';
 
 
-// store.dispatch(fetchUsers());
+store.dispatch(fetchUsers());
 
 
 const root = ReactDOM.createRoot(

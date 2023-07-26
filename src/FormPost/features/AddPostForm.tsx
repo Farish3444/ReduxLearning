@@ -1,23 +1,34 @@
 import React,{useState} from 'react'
 import { useDispatch,useSelector } from 'react-redux'
 import { selectAllPosts } from './PostSlice'
-import { nanoid,ThunkAction,ThunkDispatch,AnyAction } from '@reduxjs/toolkit'
+import { nanoid,ThunkAction,ThunkDispatch,AnyAction,createAsyncThunk } from '@reduxjs/toolkit'
 import { addNewPost } from './PostSlice';
 import { TextField } from '@mui/material';
 import {Button,Select,FormControl} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const POSTS_URL = 'https://jsonplaceholder.typicode.com/posts';
+
+
+
+interface PostBody {
+  title: string;
+  body: string;
+  userId: string;
+}
 
 const AddPostForm = () => {
     
   const dispatch: ThunkDispatch<any, void, AnyAction> = useDispatch();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [userId, setUserId] = useState('');
     const [author,setauthor] = useState('');
     const [addRequestStatus, setAddRequestStatus] = useState('idle');
 
-    const canSave = [title, content, userId].every(Boolean) && addRequestStatus === 'idle';
+    const canSave = [title, content].every(Boolean) && addRequestStatus === 'idle';
 
     const users = useSelector(selectAllPosts);
     const onTitleChanged = (e:any) => setTitle(e.target.value)
@@ -30,21 +41,28 @@ const AddPostForm = () => {
       </option>
   ))
 
-    const onSavePostClicked =()=>{
+
+  let postbody: PostBody = {
+    title,
+    body: content,
+    userId,
+  };
+
+  const addNewPostin = createAsyncThunk('posts/addNewPost', async (p) => {
+    const response = await axios.post(POSTS_URL, postbody)
+    return response.data
+  });
+
+    const onSavePostClicked = ()=>{
         if(canSave){
-          let postbody = {
-            title,
-            body:content,
-            userId
-          }
-            try{
-                setAddRequestStatus('pending')
-                dispatch(addNewPost(postbody)).unwrap();
-              setTitle('');
-              setContent('');
-              setUserId('');
-              navigate('/')
-            } catch(err){
+          console.log(postbody,'postbody')
+          try {
+            setAddRequestStatus('pending');
+            dispatch(addNewPostin()).unwrap();
+            setTitle('');
+            setContent('');
+            setUserId('');
+          } catch(err){
               console.error('Failed to save post',err)
             } finally {
               setAddRequestStatus('idle');
